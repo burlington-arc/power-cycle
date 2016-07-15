@@ -22,7 +22,7 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # https://packaging.python.org/en/latest/single_source_version.html
-    version='1.0.0',
+    version='1.0.1-DEV',
 
     description='Repeater Power-Cycler',
     long_description=long_description,
@@ -58,7 +58,7 @@ setup(
     ],
 
     # What does your project relate to?
-    keywords='raspbery pi dio relay',
+    keywords='raspbery pi gpio relay',
 
     # You can just specify the packages manually here if your project is
     # simple. Or you can use find_packages().
@@ -72,7 +72,10 @@ setup(
     # your project is installed. For an analysis of "install_requires" vs pip's
     # requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
-    install_requires=['RPi.GPIO', 'python-daemon'],
+    install_requires=['python-daemon'],
+    # Note: The actual usage requires RPi.GPIO, but that library is installed by
+    # default on Raspbian anyway.  Not listing it as a requirement allows the
+    # program to be run on other environments for development purposes.
 
     # List additional groups of dependencies here (e.g. development
     # dependencies). You can install these using the following syntax,
