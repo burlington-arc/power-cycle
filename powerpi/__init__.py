@@ -1,4 +1,5 @@
 
+import argparse
 import time
 import sys
 import os
@@ -14,17 +15,25 @@ pins= { 'repeater': 18, 'router': 17 }
 
 def main():
     """Entry point for the application script"""
-    requestedPin=sys.argv[1];
-    if not requestedPin in pins:
-        print("The following powered items are supported")
-        for pin in pins:
-            print("  " + pin)
-        sys.exit(os.EX_USAGE)
-    if len(sys.argv)==3:
-        duration=int(sys.argv[2])
-    else:
-        duration=10
+    # Create and configure the argument parser
+    argp=argparse.ArgumentParser(description="Power-cycle equipment")
+    argp.add_argument("device", nargs=1, choices=pins.keys(),
+        help="name of device to power-cycle")
+    argp.add_argument("duration", type=int,nargs="?", default=10,
+        help="power-cycle duration in seconds");
+    argp.add_argument("--dry-run", dest="dryRun", action="store_true",
+        help="Dry-run: don't actually power-cycle, but record in the logs")
+    argp.add_argument("--comment", help="Comment to be recorded in the log")
 
+    # Run the argument parser
+    args=argp.parse_args()
+
+    # If args is not satisfied, print the usage.
+
+    # Run the script.
+    requestedPin=args.device[0]
+    duration=args.duration
+    dryRun=args.dryRun
     print "Cycling {0} for {1} seconds.".format(requestedPin, duration)
     if GPIO==None:
         print "No GPIO library - this will be a dry run."
@@ -50,6 +59,10 @@ def main():
 
     pin=pins[requestedPin];
 
+    if argp.message:
+        logger.info("{0} is being power-cycled:  Message is {1}".format(
+            requestedPin, argp.message
+        ))
     if dryRun:
         logger.info("(Dry-run) Power off {0} for {1} seconds".format(requestedPin, duration))
     else:
