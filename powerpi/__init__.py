@@ -23,7 +23,8 @@ def main():
         help="power-cycle duration in seconds");
     argp.add_argument("--dry-run", dest="dryRun", action="store_true",
         help="Dry-run: don't actually power-cycle, but record in the logs")
-    argp.add_argument("--comment", help="Comment to be recorded in the log")
+    argp.add_argument("--comment", help="Comment to be recorded in the log",
+        dest="comment", default= None)
 
     # Run the argument parser
     args=argp.parse_args()
@@ -51,6 +52,11 @@ def main():
     fh.setFormatter(formatter)
     logger.addHandler(fh)
 
+    if args.comment:
+        logger.info("{0} is being power-cycled:  Comment is {1}".format(
+            requestedPin, args.comment
+        ))
+
     daemon_context=daemon.DaemonContext(
         files_preserve= [ fh.stream ]
     )
@@ -59,10 +65,6 @@ def main():
 
     pin=pins[requestedPin];
 
-    if argp.message:
-        logger.info("{0} is being power-cycled:  Message is {1}".format(
-            requestedPin, argp.message
-        ))
     if dryRun:
         logger.info("(Dry-run) Power off {0} for {1} seconds".format(requestedPin, duration))
     else:
