@@ -35,10 +35,6 @@ def main():
     requestedPin=args.device[0]
     duration=args.duration
     dryRun=args.dryRun
-    print "Cycling {0} for {1} seconds.".format(requestedPin, duration)
-    if GPIO==None:
-        print "No GPIO library - this will be a dry run."
-        dryRun=True
 
     logger=logging.getLogger()
     logger.setLevel(logging.DEBUG)
@@ -51,10 +47,15 @@ def main():
             print "Unable to write to log file '/var/log/power-cycle.log'."
             print "  ...usually this is fixed if you run with 'sudo'."
             sys.exit(-1)
-            
+
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     fh.setFormatter(formatter)
     logger.addHandler(fh)
+
+    print "Cycling {0} for {1} seconds.".format(requestedPin, duration)
+    if GPIO==None:
+        print "No GPIO library - this will be a dry run."
+        dryRun=True
 
     if args.comment:
         logger.info("{0} is being power-cycled:  Comment is {1}".format(
