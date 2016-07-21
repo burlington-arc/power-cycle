@@ -39,8 +39,6 @@ def main():
     if GPIO==None:
         print "No GPIO library - this will be a dry run."
         dryRun=True
-    else:
-        dryRun=False
 
     logger=logging.getLogger()
     logger.setLevel(logging.DEBUG)
