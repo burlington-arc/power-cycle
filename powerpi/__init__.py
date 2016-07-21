@@ -58,7 +58,7 @@ def main():
         dryRun=True
 
     if args.comment:
-        logger.info("{0} is being power-cycled:  Comment is {1}".format(
+        logger.info("{0} is being power-cycled: {1}".format(
             requestedPin, args.comment
         ))
 
